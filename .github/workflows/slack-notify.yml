@@ -1,79 +1,41 @@
-# Slack 알림 워크플로우
-name: Notify to Slack
+# Hello World + Slack Notification 워크플로우
+name: Hello World with Slack
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
+# 모든 브랜치의 push 이벤트에서 실행
+on: [push]
 
 jobs:
-  build:
+  greet:
+    name: Hello and Notify
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      # package.json이 있을 때만 실행
-      - name: Install and Test
-        if: hashFiles('**/package.json') != ''
+      # 1️⃣ 인사 출력
+      - name: 인사 출력
         run: |
-          npm ci --prefer-offline --no-audit --fund=false
-          npm test --if-present
+          echo "안녕하세요, GitHub Actions!"
+          echo "브랜치: ${{ github.ref }} / 유저: ${{ github.actor }}"
 
-      # 성공 시 알림
-      - name: Notify success to Slack
-        if: ${{ success() }}
+      # 2️⃣ 현재 시간 출력
+      - name: 현재 시간 출력
+        run: |
+          echo "실행 시간: $(date)"
+
+      # 3️⃣ Slack 알림 전송
+      - name: Slack 알림 보내기
         uses: slackapi/slack-github-action@v2
         with:
+          # 🔹 webhook 타입: incoming-webhook (필수)
+          webhook-type: incoming-webhook
+          # 🔹 GitHub Secrets에 등록한 Slack Webhook URL 사용
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # 🔹 전송할 메시지 본문
           payload: |
             {
-              "text": ":white_check_mark: 빌드 성공",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*${{ github.repository }}* `${{ github.ref_name }}` 브랜치 빌드 성공"
-                  }
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "워크플로우: ${{ github.workflow }} • 실행: #${{ github.run_number }}"
-                    }
-                  ]
-                }
-              ]
+              "text": "✅ *Hello World Workflow 성공!*\n
+              • Repository: `${{ github.repository }}`\n
+              • Branch: `${{ github.ref_name }}`\n
+              • Triggered by: `${{ github.actor }}`\n
+              • 실행 시간: $(date)"
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      # 실패 시 알림
-      - name: Notify failure to Slack
-        if: ${{ failure() }}
-        uses: slackapi/slack-github-action@v2
-        with:
-          payload: |
-            {
-              "text": ":x: ${{ github.repository }} 빌드 실패 (`${{ github.ref_name }}` 브랜치)",
-              "attachments": [
-                {
-                  "color": "#D32F2F",
-                  "fields": [
-                    { "title": "작업", "value": "${{ github.job }}", "short": true },
-                    { "title": "러너", "value": "${{ runner.os }}", "short": true }
-                  ],
-                  "footer": "에러 확인: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
