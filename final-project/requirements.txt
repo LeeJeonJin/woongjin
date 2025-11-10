@@ -1,0 +1,32 @@
+# 서울시 따릉이 데이터 분석 프로젝트 패키지 의존성
+# Python 3.9+ 권장
+
+# 데이터 처리
+pandas>=2.0.0
+numpy>=1.24.0
+
+# 시각화
+matplotlib>=3.7.0
+seaborn>=0.12.0
+folium>=0.14.0
+
+# Jupyter
+jupyter>=1.0.0
+notebook>=6.5.0
+ipykernel>=6.21.0
+
+# 선택적 (예측 모델링)
+scikit-learn>=1.2.0
+xgboost>=1.7.0
+
+# 유틸리티
+tqdm>=4.65.0
+python-dateutil>=2.8.2
+
+# 보고서 생성
+reportlab>=4.0.0
+python-pptx>=0.6.21
+Pillow>=10.0.0
+
+# 한글 폰트 처리 (선택)
+# matplotlib-fontpkg-korean>=0.1.0

@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# 가상환경
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 데이터 파일 (용량이 큰 원본 데이터는 제외)
+data/raw/*.csv
+data/external/*.csv
+*.xlsx
+*.xls
+
+# 단, 샘플 파일은 포함 (선택사항)
+!data/raw/sample.csv
+
+# 출력물 (선택적으로 제외)
+# outputs/figures/*.png
+# outputs/reports/*.pdf
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 기타
+*.log
+.env
+.cache/
